@@ -1,6 +1,8 @@
 <?php
 
-namespace App;
+declare(strict_types=1);
+
+namespace App\Balance;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;

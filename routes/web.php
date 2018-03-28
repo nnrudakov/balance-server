@@ -20,3 +20,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['namespace' => 'Balance'], function () {
+    Route::get('accounts', 'AccountController@index')->name('accounts');
+    Route::get('drebedengi/create', 'DrebedengiController@create')->name('dd.add');
+    Route::post('drebedengi/create', 'DrebedengiController@store');
+    Route::get('drebedengi/show', 'DrebedengiController@show');
+});

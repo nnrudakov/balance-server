@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Balance;
 
-use Illuminate\Http\{Request, Response};
+use Illuminate\Http\{Request, RedirectResponse};
+use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Balance\Account;
@@ -55,9 +56,9 @@ class DrebedengiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      *
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     * @return Redirector|RedirectResponse
      *
      * @throws \Throwable
      */
@@ -67,7 +68,6 @@ class DrebedengiController extends Controller
             'email' => 'required|string',
             'password' => 'required|string',
         ]);
-        //ONTxz5eB
         $auth = (object) $request->only('email', 'password');
         $account = new Account([
             'user_id' => \Auth::user()->id,
@@ -91,11 +91,12 @@ class DrebedengiController extends Controller
     public function show(): View
     {
         /** @var Account $account */
-        $account = Account::where('name', static::NAME)->first();
-        $client = new Client($account->auth->email, $account->auth->password);
+        /** @noinspection PhpUndefinedMethodInspection */
+        $account    = Account::where('name', static::NAME)->first();
+        $client     = new Client($account->auth->email, $account->auth->password);
         $currencies = \array_pluck($client->getCurrencyList(), 'code', 'id');
-        $balances = $client->getBalance();
-        $fmt = numfmt_create( 'ru_RU', \NumberFormatter::CURRENCY);
+        $balances   = $client->getBalance();
+        $fmt        = numfmt_create( 'ru_RU', \NumberFormatter::CURRENCY);
         foreach ($balances as &$balance) {
             $balance['formatted'] = numfmt_format_currency(
                 $fmt,
@@ -105,39 +106,5 @@ class DrebedengiController extends Controller
         }
 
         return \view('balance.drebedengi.show', ['balances' => $balances]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Account  $account
-     * @return Response
-     */
-    public function edit(Account $account): Response
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  Account  $account
-     * @return Response
-     */
-    public function update(Request $request, Account $account): Response
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Account  $account
-     * @return Response
-     */
-    public function destroy(Account $account): Response
-    {
-        //
     }
 }

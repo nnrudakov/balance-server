@@ -18,16 +18,16 @@
                                 {{ __('Add Account') }}
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Альфа-Банк</a>
+                                <a class="dropdown-item" href="{{ route('ab.add') }}">Альфа-Банк</a>
                                 <a class="dropdown-item" href="{{ route('dd.add') }}">Дребеденьги</a>
-                                <a class="dropdown-item" href="#">Яндекс.Деньги</a>
+                                <a class="dropdown-item" href="{{ route('ya.add') }}">Яндекс.Деньги</a>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <nav class="nav flex-column">
                             @foreach ($accounts as $account)
-                                <a class="nav-link" href="/{{ $account->name }}/show">{{ $account->title }}</a>
+                                <a class="nav-link" href="/accounts/{{ $account->name }}">{{ $account->title }}</a>
                             @endforeach
                         </nav>
                     </div>

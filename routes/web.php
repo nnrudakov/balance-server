@@ -25,5 +25,11 @@ Route::group(['namespace' => 'Balance'], function () {
     Route::get('accounts', 'AccountController@index')->name('accounts');
     Route::get('drebedengi/create', 'DrebedengiController@create')->name('dd.add');
     Route::post('drebedengi/create', 'DrebedengiController@store');
-    Route::get('drebedengi/show', 'DrebedengiController@show');
+    Route::get('accounts/drebedengi', 'DrebedengiController@show');
+    Route::get('yandex/create', 'YandexController@create')->name('ya.add');
+    Route::post('yandex/create', 'YandexController@store');
+    Route::get('accounts/yandex', 'YandexController@show');
+    Route::get('alfa/create', 'AlfaController@create')->name('ab.add');
+    Route::post('alfa/create', 'AlfaController@store');
+    Route::get('alfa/show', 'AlfaController@show');
 });

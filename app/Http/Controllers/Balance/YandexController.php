@@ -25,7 +25,7 @@ class YandexController extends Controller
      *
      * @var string
      */
-    private const NAME = 'yandex';
+    public const NAME = 'yandex';
     /**
      * Account title.
      *
@@ -116,6 +116,16 @@ class YandexController extends Controller
         $accountInfo = $client->accountInfo();
         $accountInfo->formatted = numfmt_format_currency($fmt, $accountInfo->balance, 'RUB');
 
-        return \view('balance.yandex.show', ['balance' => $accountInfo]);
+        $transactions = $client->operationHistory(['records' => 10]);
+        /** @noinspection ForeachSourceInspection */
+        foreach ($transactions->operations as $transaction) {
+            $transaction->formatted = numfmt_format_currency($fmt, $transaction->amount, 'RUB');
+        }
+
+        return \view('balance.yandex.show', [
+            'balance' => $accountInfo,
+            'transactions' => $transactions,
+            'sync_date' => $account->sync_date,
+        ]);
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string  $name       Account name.
  * @property string  $title      Account title.
  * @property object  $auth       Authentication data.
+ * @property string  $sync_date  Last synchronization date.
  * @property integer $created_at Created date.
  * @property integer $updated_at Updated date.
  *
@@ -29,5 +30,6 @@ class Account extends Model
 
     protected $casts = [
         'auth' => 'object',
+        'sync_date' => 'datetime'
     ];
 }

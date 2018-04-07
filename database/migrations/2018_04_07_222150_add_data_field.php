@@ -6,13 +6,13 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Add synchronization date to accounts.
+ * Add data to accounts.
  *
  * @package    Balance
  * @author     Nikolaj Rudakov <nnrudakov@gmail.com>
  * @copyright  2018
  */
-class AddSyncField extends Migration
+class AddDataField extends Migration
 {
     /**
      * Run the migrations.
@@ -22,7 +22,7 @@ class AddSyncField extends Migration
     public function up(): void
     {
         \Schema::table('accounts', function (Blueprint $table) {
-            $table->dateTime('sync_date')->nullable()->comment('Last sync date');
+            $table->jsonb('data')->nullable()->comment('Data');
         });
     }
 
@@ -34,7 +34,7 @@ class AddSyncField extends Migration
     public function down(): void
     {
         \Schema::table('accounts', function (Blueprint $table) {
-            $table->dropColumn('sync_date');
+            $table->dropColumn('data');
         });
     }
 }

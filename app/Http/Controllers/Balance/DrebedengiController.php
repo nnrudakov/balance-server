@@ -8,7 +8,7 @@ use Illuminate\Http\{Request, RedirectResponse};
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
-use App\Balance\Account;
+use App\Balance\AccountDrebedengi;
 use App\Balance\Drebedengi\Client;
 
 /**
@@ -20,19 +20,6 @@ use App\Balance\Drebedengi\Client;
  */
 class DrebedengiController extends Controller
 {
-    /**
-     * Account name.
-     *
-     * @var string
-     */
-    private const NAME = 'drebedengi';
-    /**
-     * Account title.
-     *
-     * @var string
-     */
-    private const TITLE = 'Дребеденьги';
-
     /**
      * Create a new controller instance.
      *
@@ -69,10 +56,10 @@ class DrebedengiController extends Controller
             'password' => 'required|string',
         ]);
         $auth = (object) $request->only('email', 'password');
-        $account = new Account([
+        $account = new AccountDrebedengi([
             'user_id' => \Auth::user()->id,
-            'name' => static::NAME,
-            'title' => static::TITLE,
+            'name' => AccountDrebedengi::NAME,
+            'title' => AccountDrebedengi::TITLE,
             'auth' => $auth
         ]);
         $client = new Client($auth->email, $auth->password);
@@ -80,7 +67,7 @@ class DrebedengiController extends Controller
             $account->saveOrFail();
         }
 
-        return \redirect('/drebedengi/show');
+        return \redirect(\route('dd.show'));
     }
 
     /**
@@ -90,9 +77,7 @@ class DrebedengiController extends Controller
      */
     public function show(): View
     {
-        /** @var Account $account */
-        /** @noinspection PhpUndefinedMethodInspection */
-        $account    = Account::where('name', static::NAME)->first();
+        $account    = AccountDrebedengi::query()->where('user_id', \Auth::user()->id)->first();
         $client     = new Client($account->auth->email, $account->auth->password);
         $currencies = \array_pluck($client->getCurrencyList(), 'code', 'id');
         $balances   = $client->getBalance();
@@ -106,5 +91,25 @@ class DrebedengiController extends Controller
         }
 
         return \view('balance.drebedengi.show', ['balances' => $balances]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return Redirector|RedirectResponse
+     */
+    public function update()
+    {
+        $account = AccountDrebedengi::query()->where('user_id', \Auth::user()->id)->first();
+        $client = new Client($account->auth->email, $account->auth->password);
+        $account->data = [
+            'currencies' => \array_flip(\array_pluck($client->getCurrencyList(), 'code', 'id')),
+            'categories' => $client->getCategoryList(),
+            'sources' => $client->getSourceList(),
+            'places' => $client->getPlaceList()
+        ];
+        $account->update(['data']);
+
+        return \redirect(\route('dd.show'));
     }
 }

@@ -68,6 +68,48 @@ class Client
     }
 
     /**
+     * Get category list.
+     *
+     * @return array
+     */
+    public function getCategoryList(): array
+    {
+        return $this->request(__FUNCTION__);
+    }
+
+    /**
+     * Get sources list.
+     *
+     * @return array
+     */
+    public function getSourceList(): array
+    {
+        return $this->request(__FUNCTION__);
+    }
+
+    /**
+     * Get places list.
+     *
+     * @return array
+     */
+    public function getPlaceList(): array
+    {
+        return $this->request(__FUNCTION__);
+    }
+
+    /**
+     * Set records list.
+     *
+     * @param array $records Records list.
+     *
+     * @return array
+     */
+    public function setRecordList(array  $records): array
+    {
+        return $this->request(__FUNCTION__, $records);
+    }
+
+    /**
      * Request to service.
      *
      * @param string $method Method name.

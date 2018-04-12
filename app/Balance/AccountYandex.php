@@ -25,6 +25,18 @@ class AccountYandex extends Account
      * @var string
      */
     public const TITLE = 'Яндекс.Деньги';
+    /**
+     * Operation type `in`.
+     *
+     * @var string
+     */
+    public const TYPE_IN = 'in';
+    /**
+     * Operation type `out`.
+     *
+     * @var string
+     */
+    public const TYPE_OUT = 'out';
 
     protected $table = 'accounts';
 

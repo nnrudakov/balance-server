@@ -43,7 +43,7 @@
                             <tr>
                                 <td>{{ Carbon\Carbon::parse($transaction->datetime, new \DateTimeZone('Europe/Moscow'))->format('d.m.Y H:i') }}</td>
                                 <td>{{ $transaction->title }}</td>
-                                <td class="@if ($transaction->direction === 'out') text-info @else text-success @endif">@if ($transaction->direction === 'out') &minus; @else &plus; @endif{{ $transaction->formatted }}</td>
+                                <td class="@if ($transaction->direction === App\Balance\AccountYandex::TYPE_OUT) text-info @else text-success @endif">@if ($transaction->direction === 'out') &minus; @else &plus; @endif{{ $transaction->formatted }}</td>
                             </tr>
                         @endforeach
                         </tbody>

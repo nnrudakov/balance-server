@@ -9,7 +9,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use YandexMoney\API;
 use App\Http\Controllers\Controller;
-use App\Balance\Account;
+use App\Balance\AccountYandex;
 
 /**
  * Yandex.Money controller.
@@ -20,19 +20,6 @@ use App\Balance\Account;
  */
 class YandexController extends Controller
 {
-    /**
-     * Account name.
-     *
-     * @var string
-     */
-    public const NAME = 'yandex';
-    /**
-     * Account title.
-     *
-     * @var string
-     */
-    private const TITLE = 'Яндекс.Деньги';
-
     /**
      * Scopes.
      *
@@ -72,10 +59,10 @@ class YandexController extends Controller
         if(property_exists($access_token_response, 'error')) {
             throw new \ErrorException($access_token_response->error);
         }
-        $account = new Account([
+        $account = new AccountYandex([
             'user_id' => \Auth::user()->id,
-            'name' => static::NAME,
-            'title' => static::TITLE,
+            'name' => AccountYandex::NAME,
+            'title' => AccountYandex::TITLE,
             'auth' => (object) ['access_token' => $access_token_response->access_token]
         ]);
         /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
@@ -107,9 +94,7 @@ class YandexController extends Controller
      */
     public function show(): View
     {
-        /** @var Account $account */
-        /** @noinspection PhpUndefinedMethodInspection */
-        $account = Account::where('name', static::NAME)->first();
+        $account = AccountYandex::query()->where('user_id', \Auth::user()->id)->first();
         $client = new API($account->auth->access_token);
         $fmt = numfmt_create( 'ru_RU', \NumberFormatter::CURRENCY);
         /** @noinspection PhpUnhandledExceptionInspection */

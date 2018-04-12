@@ -25,7 +25,8 @@ Route::group(['namespace' => 'Balance'], function () {
     Route::get('accounts', 'AccountController@index')->name('accounts');
     Route::get('drebedengi/create', 'DrebedengiController@create')->name('dd.add');
     Route::post('drebedengi/create', 'DrebedengiController@store');
-    Route::get('accounts/drebedengi', 'DrebedengiController@show');
+    Route::post('drebedengi/update', 'DrebedengiController@update')->name('dd.update');
+    Route::get('accounts/drebedengi', 'DrebedengiController@show')->name('dd.show');
     Route::get('yandex/create', 'YandexController@create')->name('ya.add');
     Route::post('yandex/create', 'YandexController@store');
     Route::get('accounts/yandex', 'YandexController@show');

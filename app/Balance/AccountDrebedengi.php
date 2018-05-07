@@ -86,6 +86,54 @@ class AccountDrebedengi extends Account
      */
     private const CATEGORY_POWER = 'Коммунальнальные платежи';
     /**
+     * Category for car.
+     *
+     * @var string
+     */
+    private const CATEGORY_CAR = 'Автомобиль';
+    /**
+     * Category for electricity.
+     *
+     * @var string
+     */
+    private const CATEGORY_CARPARTS = 'Запчасти, ремонт';
+    /**
+     * Category for appliances.
+     *
+     * @var string
+     */
+    private const CATEGORY_APPLIANCES = 'Бытовая техника';
+    /**
+     * Category for other expences.
+     *
+     * @var string
+     */
+    private const CATEGORY_OTHER = 'Другие траты';
+    /**
+     * Category for fare.
+     *
+     * @var string
+     */
+    private const CATEGORY_FARE = 'Проезд';
+    /**
+     * Category for home.
+     *
+     * @var string
+     */
+    private const CATEGORY_HOME = 'Дом';
+    /**
+     * Category for equipment.
+     *
+     * @var string
+     */
+    private const CATEGORY_HOMEEQUIPMENT = 'Инструменты';
+    /**
+     * Category for utility bills.
+     *
+     * @var string
+     */
+    private const CATEGORY_HOMEBILLS = 'Коммунальнальные платежи';
+    /**
      * Place for Alfa-Bank.
      *
      * @var string
@@ -156,6 +204,82 @@ class AccountDrebedengi extends Account
     {
         if ($parent = $this->findCategory(static::CATEGORY_FLAT)) {
             $category = $this->findCategory(static::CATEGORY_POWER, (int) $parent->id);
+
+            return $category ? (int) $category->id : 0;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get car parts category ID.
+     *
+     * @reurn integer
+     */
+    public function getCategoryCarParts(): int
+    {
+        if ($parent = $this->findCategory(static::CATEGORY_CAR)) {
+            $category = $this->findCategory(static::CATEGORY_CARPARTS, (int) $parent->id);
+
+            return $category ? (int) $category->id : 0;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get appliances category ID.
+     *
+     * @reurn integer
+     */
+    public function getCategoryAppliances(): int
+    {
+        $category = $this->findCategory(static::CATEGORY_APPLIANCES);
+
+        return $category ? (int) $category->id : 0;
+    }
+
+    /**
+     * Get fare category ID.
+     *
+     * @reurn integer
+     */
+    public function getCategoryFare(): int
+    {
+        if ($parent = $this->findCategory(static::CATEGORY_OTHER)) {
+            $category = $this->findCategory(static::CATEGORY_FARE, (int) $parent->id);
+
+            return $category ? (int) $category->id : 0;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get home equipment category ID.
+     *
+     * @reurn integer
+     */
+    public function getCategoryHomeEquipment(): int
+    {
+        if ($parent = $this->findCategory(static::CATEGORY_HOME)) {
+            $category = $this->findCategory(static::CATEGORY_HOMEEQUIPMENT, (int) $parent->id);
+
+            return $category ? (int) $category->id : 0;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get home bills category ID.
+     *
+     * @reurn integer
+     */
+    public function getCategoryHomeBills(): int
+    {
+        if ($parent = $this->findCategory(static::CATEGORY_HOME)) {
+            $category = $this->findCategory(static::CATEGORY_HOMEBILLS, (int) $parent->id);
 
             return $category ? (int) $category->id : 0;
         }

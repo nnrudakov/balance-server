@@ -1,7 +1,7 @@
 @php
 /** @var stdClass $balance */
 /** @var \stdClass[] $transactions */
-/** @var string $sync_date */
+/** @var \Carbon\Carbon $sync_date */
 @endphp
 
 @extends('layouts.app')
@@ -25,7 +25,7 @@
                     <h3 class="mt-5">The last synchronization date</h3>
                     <div>
                         @if ($sync_date)
-                            {{ Carbon\Carbon::parse($sync_date, new \DateTimeZone('Europe/Moscow'))->diffForHumans() }}
+                            {{ $sync_date->diffForHumans() }} ({{ $sync_date->format('d.m.Y H:i') }})
                         @else
                             No synchronization yet.
                         @endif</div>
@@ -41,9 +41,9 @@
                         <tbody>
                         @foreach ($transactions->operations as $transaction)
                             <tr>
-                                <td>{{ Carbon\Carbon::parse($transaction->datetime, new \DateTimeZone('Europe/Moscow'))->format('d.m.Y H:i') }}</td>
+                                <td>{{ Carbon\Carbon::parse($transaction->datetime, new \DateTimeZone('Europe/Moscow'))->addRealHour(3)->format('d.m.Y H:i') }}</td>
                                 <td>{{ $transaction->title }}</td>
-                                <td class="@if ($transaction->direction === App\Balance\AccountYandex::TYPE_OUT) text-info @else text-success @endif">@if ($transaction->direction === 'out') &minus; @else &plus; @endif{{ $transaction->formatted }}</td>
+                                <td class="@if ($transaction->direction === App\Balance\AccountYandex::TYPE_OUT) text-info @else text-success @endif">@if ($transaction->direction === 'out') &minus;&nbsp;@else &plus;&nbsp;@endif{{ $transaction->formatted }}</td>
                             </tr>
                         @endforeach
                         </tbody>

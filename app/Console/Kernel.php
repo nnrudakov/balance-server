@@ -64,8 +64,10 @@ class Kernel extends ConsoleKernel
         /** @noinspection PhpUndefinedMethodInspection */
         $schedule->command(SyncYandex::class)
             ->description('Yandex synchronization')
-            //->everyTenMinutes()
-            ->everyMinute()
+            ->timezone('Europe/Moscow')
+            ->between('8:00', '20:01')
+            ->everyThirtyMinutes()
+            //->everyMinute()
             ->sendOutputTo(Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . 'yandex.log')
             ->withoutOverlapping();
     }

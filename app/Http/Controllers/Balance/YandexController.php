@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Balance;
 
+use Carbon\Carbon;
 use Illuminate\Http\{Request, RedirectResponse};
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
@@ -110,7 +111,9 @@ class YandexController extends Controller
         return \view('balance.yandex.show', [
             'balance' => $accountInfo,
             'transactions' => $transactions,
-            'sync_date' => $account->sync_date,
+            'sync_date' => $account->sync_date
+                ? Carbon::parse($account->sync_date, new \DateTimeZone('Europe/Moscow'))
+                : null
         ]);
     }
 }

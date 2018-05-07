@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+use App\Balance\Account;
+
 class HomeController extends Controller
 {
     /**
@@ -19,10 +22,15 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
-        return view('home');
+        $accounts = [];
+        foreach (Account::all() as $account) {
+            $accounts[$account->title] = $account->getBalances();
+        }
+
+        return view('home', ['accounts' => $accounts]);
     }
 }

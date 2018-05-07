@@ -49,10 +49,11 @@ class SyncYandex extends Command
             }
 
             $dd_account = AccountDrebedengi::query()->where('user_id', $ya_account->user_id)->first();
-            $records = $this->fillDrebedengiRecords($ya_account, $dd_account, $transactions->operations);
-            $dd_client = new Client($dd_account->auth->email, $dd_account->auth->password);
-            /*$result = */$dd_client->setRecordList($records);
-            //\print_r($result);die;
+            if ($records = $this->fillDrebedengiRecords($ya_account, $dd_account, $transactions->operations)) {
+                $dd_client = new Client($dd_account->auth->email, $dd_account->auth->password);
+                $dd_client->setRecordList($records);
+                //\print_r($result);die;
+            }
             $ya_account->sync_date = Carbon::now();
             $ya_account->update(['sync_date']);
         }
@@ -97,10 +98,10 @@ class SyncYandex extends Command
         $records = [];
         /** @noinspection ForeachSourceInspection */
         foreach ($transactions as $transaction) {
-            $operation_type = $this->getOperation($transaction);
-            if ($operation_type === AccountDrebedengi::TYPE_MOVE) {
+            if ($transaction->direction === AccountYandex::TYPE_IN) {
                 continue;
             }
+            $operation_type = $this->getOperation($transaction);
             $sum = $transaction->amount * 100;
             $records[] = [
                 'client_id'        => $transaction->operation_id,
@@ -171,6 +172,16 @@ class SyncYandex extends Command
                     $budget = $dd->getCategoryFastFood();
                 } elseif (\strpos($transaction->title, 'SIS.NESK.RU') !== false) {
                     $budget = $dd->getCategoryPower();
+                } elseif (\strpos($transaction->title, 'AVTODETALI') !== false) {
+                    $budget = $dd->getCategoryCarParts();
+                } elseif (\strpos($transaction->title, 'DNS') !== false) {
+                    $budget = $dd->getCategoryAppliances();
+                } elseif (\strpos($transaction->title, 'PLATA ZA PROEZD') !== false) {
+                    $budget = $dd->getCategoryFare();
+                } elseif (\strpos($transaction->title, 'BAUCENTER') !== false) {
+                    $budget = $dd->getCategoryHomeEquipment();
+                } elseif (\strpos($transaction->title, 'tdgorizont') !== false) {
+                    $budget = $dd->getCategoryHomeBills();
                 } else {
                     $budget = $dd->getCategoryFood();
                 }
@@ -197,9 +208,13 @@ class SyncYandex extends Command
     private function getComment(\stdClass $transaction): string
     {
         if (\strpos($transaction->title, 'SIS.NESK.RU') !== false) {
-            return '[Электроэнергия]';
+            $comment = '[Электроэнергия]';
+        } elseif (\strpos($transaction->title, 'tdgorizont') !== false) {
+            $comment = '[Участок]';
+        } else {
+            $comment = 'ttestt';
         }
 
-        return 'ttestt';
+        return $comment;
     }
 }

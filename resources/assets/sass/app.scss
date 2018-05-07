@@ -1,6 +1,7 @@
 
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import url('https://fonts.googleapis.com/css?family=Cormorant+Infant:300,400,500,600&subset=cyrillic,cyrillic-ext');
 
 // Variables
 @import "variables";
@@ -16,7 +17,7 @@
 html, body {
   background-color: #fff;
   color: #636b6f;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Raleway', 'Cormorant Infant', sans-serif;
   font-weight: 100;
   height: 100vh;
   margin: 0;
@@ -81,3 +82,5 @@ html, body {
     padding-left: 0;
   }
 }
+
+

@@ -1,3 +1,6 @@
+@php
+/** @var array $accounts */
+@endphp
 @extends('layouts.app')
 
 @section('content')
@@ -14,7 +17,19 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    @if ($accounts)
+                        <ul class="list-group">
+                        @foreach ($accounts as $title => $balances)
+                            <li class="list-group-item list-group-item-info">{{ $title }}
+                                <ul>
+                                    @foreach ($balances as $balance)
+                                        <li></li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
+                        </ul>
+                    @endif
                 </div>
             </div>
         </div>

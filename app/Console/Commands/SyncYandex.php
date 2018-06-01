@@ -100,7 +100,7 @@ class SyncYandex extends Command
         $records = [];
         /** @noinspection ForeachSourceInspection */
         foreach ($transactions as $transaction) {
-            if ($transaction->direction === AccountYandex::TYPE_IN) {
+            if ($transaction->direction === AccountYandex::TYPE_IN || $transaction->title === 'Лукойл (ЮГ)') {
                 continue;
             }
             $operation_type = $this->getOperation($transaction);

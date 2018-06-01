@@ -34,6 +34,8 @@ class SyncYandex extends Command
      * Command execution.
      *
      * @return void
+     *
+     * @throws \SoapFault
      */
     public function handle(): void
     {

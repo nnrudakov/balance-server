@@ -51,6 +51,8 @@ class Client
      * @param array $params Parameters.
      *
      * @return array
+     *
+     * @throws \SoapFault
      */
     public function getBalance(array $params = []): array
     {
@@ -61,6 +63,8 @@ class Client
      * Get currencies list.
      *
      * @return array
+     *
+     * @throws \SoapFault
      */
     public function getCurrencyList(): array
     {
@@ -71,6 +75,8 @@ class Client
      * Get category list.
      *
      * @return array
+     *
+     * @throws \SoapFault
      */
     public function getCategoryList(): array
     {
@@ -81,6 +87,8 @@ class Client
      * Get sources list.
      *
      * @return array
+     *
+     * @throws \SoapFault
      */
     public function getSourceList(): array
     {
@@ -91,6 +99,8 @@ class Client
      * Get places list.
      *
      * @return array
+     *
+     * @throws \SoapFault
      */
     public function getPlaceList(): array
     {
@@ -103,6 +113,8 @@ class Client
      * @param array $records Records list.
      *
      * @return array
+     *
+     * @throws \SoapFault
      */
     public function setRecordList(array  $records): array
     {
@@ -116,9 +128,19 @@ class Client
      * @param array  $params Parameters.
      *
      * @return mixed
+     *
+     * @throws \SoapFault
      */
     private function request($method, array $params = [])
     {
-        return $this->client->$method(\env('DREBEDENGI_API_KEY'), $this->email, $this->password, $params);
+        try {
+            return $this->client->$method(\env('DREBEDENGI_API_KEY'), $this->email, $this->password, $params);
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\SoapFault $e) {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $filename = \Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
+            \file_put_contents($filename . 'soap-request.xml', $this->client->__getLastRequest());
+            \file_put_contents($filename . 'soap-response.xml', $this->client->__getLastResponse());
+            throw $e;
+        }
     }
 }

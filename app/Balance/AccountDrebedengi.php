@@ -132,7 +132,7 @@ class AccountDrebedengi extends Account
      *
      * @var string
      */
-    private const CATEGORY_HOMEBILLS = 'Коммунальнальные платежи';
+    private const CATEGORY_HOMEBILLS = 'Коммунальные';
     /**
      * Place for Alfa-Bank.
      *

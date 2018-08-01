@@ -214,7 +214,7 @@ class SyncYandex extends Command
         } elseif (\strpos($transaction->title, 'tdgorizont') !== false) {
             $comment = '[Участок]';
         } else {
-            $comment = 'ttestt';
+            $comment = 'balance-server';
         }
 
         return $comment;

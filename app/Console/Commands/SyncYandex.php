@@ -180,7 +180,7 @@ class SyncYandex extends Command
                     $budget = $dd->getCategoryAppliances();
                 } elseif (\strpos($transaction->title, 'PLATA ZA PROEZD') !== false) {
                     $budget = $dd->getCategoryFare();
-                } elseif (\preg_match('/BAUCENTER|VSEINSTRUMENTY/', $transaction->title)) {
+                } elseif (\preg_match('/BAUCENTER|VSEINSTRUMENTY|LERUA/', $transaction->title)) {
                     $budget = $dd->getCategoryHomeEquipment();
                 } elseif (\strpos($transaction->title, 'tdgorizont') !== false) {
                     $budget = $dd->getCategoryHomeBills();

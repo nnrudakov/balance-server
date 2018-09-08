@@ -97,7 +97,7 @@ class YandexController extends Controller
     {
         $account = AccountYandex::query()->where('user_id', \Auth::user()->id)->first();
         $client = new API($account->auth->access_token);
-        $fmt = numfmt_create( 'ru_RU', \NumberFormatter::CURRENCY);
+        $fmt = numfmt_create('ru_RU', \NumberFormatter::CURRENCY);
         /** @noinspection PhpUnhandledExceptionInspection */
         $accountInfo = $client->accountInfo();
         $accountInfo->formatted = numfmt_format_currency($fmt, $accountInfo->balance, 'RUB');

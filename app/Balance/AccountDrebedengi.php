@@ -9,7 +9,7 @@ namespace App\Balance;
  *
  * @package    App\Balance
  * @author     Nikolaj Rudakov <nnrudakov@gmail.com>
- * @copyright  2018
+ * @copyright  2018-2019
  */
 class AccountDrebedengi extends Account
 {
@@ -133,6 +133,12 @@ class AccountDrebedengi extends Account
      * @var string
      */
     private const CATEGORY_HOMEBILLS = 'Коммунальные';
+    /**
+     * Place for cash.
+     *
+     * @var string
+     */
+    private const PLACE_CASH = 'Наличные';
     /**
      * Place for Alfa-Bank.
      *
@@ -285,6 +291,18 @@ class AccountDrebedengi extends Account
         }
 
         return 0;
+    }
+
+    /**
+     * Get cash place.
+     *
+     * @reurn integer
+     */
+    public function getPlaceCash(): int
+    {
+        $place = $this->findPlace(static::PLACE_CASH);
+
+        return $place ? (int) $place->id : 0;
     }
 
     /**

@@ -162,16 +162,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        /*
-         * IDE Helper
-         */
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-
-        /*
-         * Debug Bar
-         */
-        Barryvdh\Debugbar\ServiceProvider::class,
-
     ],
 
     /*

@@ -13,15 +13,13 @@ declare(strict_types=1);
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', static function () { return view('welcome'); });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['namespace' => 'Balance'], function () {
+Route::group(['namespace' => 'Balance'], static function () {
     Route::get('accounts', 'AccountController@index')->name('accounts');
     Route::get('drebedengi/create', 'DrebedengiController@create')->name('dd.add');
     Route::post('drebedengi/create', 'DrebedengiController@store');
@@ -34,3 +32,5 @@ Route::group(['namespace' => 'Balance'], function () {
     Route::post('alfa/create', 'AlfaController@store');
     Route::get('alfa/show', 'AlfaController@show');
 });
+
+Route::post('/qr', 'QrController@index')->name('qr');

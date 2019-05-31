@@ -62,6 +62,12 @@ class AccountDrebedengi extends Account
      */
     private const CATEGORY_MEDS = 'Аптека';
     /**
+     * Category for treatment.
+     *
+     * @var string
+     */
+    private const CATEGORY_TREATMENT = 'Анализы и лечение';
+    /**
      * Category for fuel.
      *
      * @var string
@@ -173,6 +179,18 @@ class AccountDrebedengi extends Account
     public function getCategoryMeds(): int
     {
         $category = $this->findCategory(static::CATEGORY_MEDS);
+
+        return $category ? (int) $category->id : 0;
+    }
+
+    /**
+     * Get medical treatment category ID.
+     *
+     * @reurn integer
+     */
+    public function getCategoryMedTreatment(): int
+    {
+        $category = $this->findCategory(static::CATEGORY_TREATMENT);
 
         return $category ? (int) $category->id : 0;
     }

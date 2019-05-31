@@ -15,7 +15,7 @@ use App\Exceptions\YandexException;
  *
  * @package    App\Console\Commands
  * @author     Nikolaj Rudakov <nnrudakov@gmail.com>
- * @copyright  2018
+ * @copyright  2018-2019
  */
 class SyncYandex extends Command
 {
@@ -184,6 +184,8 @@ class SyncYandex extends Command
                     $budget = $dd->getCategoryHomeEquipment();
                 } elseif (\strpos($transaction->title, 'tdgorizont') !== false) {
                     $budget = $dd->getCategoryHomeBills();
+                } elseif (\strpos($transaction->title, 'GBUZ') !== false) {
+                    $budget = $dd->getCategoryMedTreatment();
                 } else {
                     $budget = $dd->getCategoryFood();
                 }

@@ -168,7 +168,7 @@ class SyncYandex extends Command
             case AccountDrebedengi::TYPE_WASTE:
                 if (\strpos($transaction->title, 'APTEKA') !== false) {
                     $budget = $dd->getCategoryMeds();
-                } elseif (\preg_match('/LUKOIL|ROSNEFT/', $transaction->title)) {
+                } elseif (\preg_match('/LUKOIL|ROSNEFT|GAZPROMNEFT/', $transaction->title)) {
                     $budget = $dd->getCategoryFuel();
                 } elseif (\preg_match('/IL PATIO|IP CYBULINA/', $transaction->title)) {
                     $budget = $dd->getCategoryFastFood();

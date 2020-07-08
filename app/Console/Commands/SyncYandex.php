@@ -168,7 +168,7 @@ class SyncYandex extends Command
             case AccountDrebedengi::TYPE_WASTE:
                 if (\strpos($transaction->title, 'APTEKA') !== false) {
                     $budget = $dd->getCategoryMeds();
-                } elseif (\preg_match('/LUKOIL|ROSNEFT/', $transaction->title)) {
+                } elseif (\preg_match('/LUKOIL|ROSNEFT|GAZPROMNEFT|GPNBONUS/', $transaction->title)) {
                     $budget = $dd->getCategoryFuel();
                 } elseif (\preg_match('/IL PATIO|IP CYBULINA/', $transaction->title)) {
                     $budget = $dd->getCategoryFastFood();
@@ -184,8 +184,10 @@ class SyncYandex extends Command
                     $budget = $dd->getCategoryHomeEquipment();
                 } elseif (\strpos($transaction->title, 'tdgorizont') !== false) {
                     $budget = $dd->getCategoryHomeBills();
-                } elseif (\strpos($transaction->title, 'GBUZ') !== false) {
+                } elseif (\preg_match('/GBUZ|EVDIO/', $transaction->title)) {
                     $budget = $dd->getCategoryMedTreatment();
+                } elseif (\strpos($transaction->title, 'IP USOLCEVA N.G') !== false) {
+                    $budget = $dd->getCategoryVanguardFood();
                 } else {
                     $budget = $dd->getCategoryFood();
                 }

@@ -140,6 +140,18 @@ class AccountDrebedengi extends Account
      */
     private const CATEGORY_HOMEBILLS = 'Коммунальные';
     /**
+     * @var string Category for work.
+     */
+    private const CATEGORY_WORK = 'Работа';
+    /**
+     * @var string Category for VanguardSoft.
+     */
+    private const CATEGORY_WORKVANGUARD = 'Вангард';
+    /**
+     * @var string Category for fooed in VanguardSoft.
+     */
+    private const CATEGORY_WORKVANGUARDFOOD = 'Питание';
+    /**
      * Place for cash.
      *
      * @var string
@@ -304,6 +316,23 @@ class AccountDrebedengi extends Account
     {
         if ($parent = $this->findCategory(static::CATEGORY_HOME)) {
             $category = $this->findCategory(static::CATEGORY_HOMEBILLS, (int) $parent->id);
+
+            return $category ? (int) $category->id : 0;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get work VanguradSoft food category ID.
+     *
+     * @reurn integer
+     */
+    public function getCategoryVanguardFood(): int
+    {
+        if (($work = $this->findCategory(static::CATEGORY_WORK)) &&
+            ($parent = $this->findCategory(static::CATEGORY_WORKVANGUARD, (int) $work->id))) {
+            $category = $this->findCategory(static::CATEGORY_WORKVANGUARDFOOD, (int)$parent->id);
 
             return $category ? (int) $category->id : 0;
         }

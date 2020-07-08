@@ -150,7 +150,7 @@ class AccountDrebedengi extends Account
     /**
      * @var string Category for food in VanguardSoft.
      */
-    private const CATEGORY_WORKVANGUARDFOOD = 'Питание';
+    private const CATEGORY_WORKFOOD = 'Питание';
     /**
      * Place for cash.
      *
@@ -332,7 +332,7 @@ class AccountDrebedengi extends Account
     {
         if (($work = $this->findCategory(static::CATEGORY_WORK)) &&
             ($parent = $this->findCategory(static::CATEGORY_WORKVANGUARD, (int) $work->id))) {
-            $category = $this->findCategory(static::CATEGORY_WORKVANGUARDFOOD, (int)$parent->id);
+            $category = $this->findCategory(static::CATEGORY_WORKFOOD, (int)$parent->id);
 
             return $category ? (int) $category->id : 0;
         }

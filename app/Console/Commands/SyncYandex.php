@@ -50,6 +50,7 @@ class SyncYandex extends Command
                 continue;
             }
 
+            /** @var AccountDrebedengi $dd_account */
             $dd_account = AccountDrebedengi::query()->where('user_id', $ya_account->user_id)->first();
             if ($records = $this->fillDrebedengiRecords($ya_account, $dd_account, $transactions->operations)) {
                 $dd_client = new Client($dd_account->auth->email, $dd_account->auth->password);
@@ -98,7 +99,6 @@ class SyncYandex extends Command
     private function fillDrebedengiRecords(AccountYandex $ya, AccountDrebedengi $dd, array $transactions): array
     {
         $records = [];
-        /** @noinspection ForeachSourceInspection */
         foreach ($transactions as $transaction) {
             if ($transaction->direction === AccountYandex::TYPE_IN || $transaction->title === 'Лукойл (ЮГ)') {
                 continue;

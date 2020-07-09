@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Balance;
 
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * Drebedengi account model.
  *
@@ -144,6 +146,10 @@ class AccountDrebedengi extends Account
      */
     private const CATEGORY_WORK = 'Работа';
     /**
+     * @var string Category for my work.
+     */
+    private const CATEGORY_WORKME = 'Коля';
+    /**
      * @var string Category for VanguardSoft.
      */
     private const CATEGORY_WORKVANGUARD = 'Вангард';
@@ -166,7 +172,7 @@ class AccountDrebedengi extends Account
 
     protected $table = 'accounts';
 
-    public static function query()
+    public static function query(): Builder
     {
         return parent::query()->where('name', static::NAME);
     }
@@ -180,7 +186,33 @@ class AccountDrebedengi extends Account
     {
         $category = $this->findCategory(static::CATEGORY_FOOD);
 
-        return $category ? (int) $category->id : 0;
+        return $category ? (int)$category->id : 0;
+    }
+
+    /**
+     * Find category by name.
+     *
+     * @param string $name Name.
+     * @param integer $parentId Parent ID.
+     *
+     * @return \stdClass
+     */
+    private function findCategory(string $name, int $parentId = 0): ?\stdClass
+    {
+        foreach ($this->data->categories as $category) {
+            if ($category->name === $name) {
+                if ($parentId) {
+                    if ($parentId === (int)$category->parent_id) {
+                        return $category;
+                    }
+                    continue;
+                }
+
+                return $category;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -192,7 +224,7 @@ class AccountDrebedengi extends Account
     {
         $category = $this->findCategory(static::CATEGORY_MEDS);
 
-        return $category ? (int) $category->id : 0;
+        return $category ? (int)$category->id : 0;
     }
 
     /**
@@ -204,7 +236,7 @@ class AccountDrebedengi extends Account
     {
         $category = $this->findCategory(static::CATEGORY_TREATMENT);
 
-        return $category ? (int) $category->id : 0;
+        return $category ? (int)$category->id : 0;
     }
 
     /**
@@ -216,7 +248,7 @@ class AccountDrebedengi extends Account
     {
         $category = $this->findCategory(static::CATEGORY_FUEL);
 
-        return $category ? (int) $category->id : 0;
+        return $category ? (int)$category->id : 0;
     }
 
     /**
@@ -228,7 +260,7 @@ class AccountDrebedengi extends Account
     {
         $category = $this->findCategory(static::CATEGORY_FASTFOOD);
 
-        return $category ? (int) $category->id : 0;
+        return $category ? (int)$category->id : 0;
     }
 
     /**
@@ -239,9 +271,9 @@ class AccountDrebedengi extends Account
     public function getCategoryPower(): int
     {
         if ($parent = $this->findCategory(static::CATEGORY_FLAT)) {
-            $category = $this->findCategory(static::CATEGORY_POWER, (int) $parent->id);
+            $category = $this->findCategory(static::CATEGORY_POWER, (int)$parent->id);
 
-            return $category ? (int) $category->id : 0;
+            return $category ? (int)$category->id : 0;
         }
 
         return 0;
@@ -255,9 +287,9 @@ class AccountDrebedengi extends Account
     public function getCategoryCarParts(): int
     {
         if ($parent = $this->findCategory(static::CATEGORY_CAR)) {
-            $category = $this->findCategory(static::CATEGORY_CARPARTS, (int) $parent->id);
+            $category = $this->findCategory(static::CATEGORY_CARPARTS, (int)$parent->id);
 
-            return $category ? (int) $category->id : 0;
+            return $category ? (int)$category->id : 0;
         }
 
         return 0;
@@ -272,7 +304,7 @@ class AccountDrebedengi extends Account
     {
         $category = $this->findCategory(static::CATEGORY_APPLIANCES);
 
-        return $category ? (int) $category->id : 0;
+        return $category ? (int)$category->id : 0;
     }
 
     /**
@@ -283,9 +315,9 @@ class AccountDrebedengi extends Account
     public function getCategoryFare(): int
     {
         if ($parent = $this->findCategory(static::CATEGORY_OTHER)) {
-            $category = $this->findCategory(static::CATEGORY_FARE, (int) $parent->id);
+            $category = $this->findCategory(static::CATEGORY_FARE, (int)$parent->id);
 
-            return $category ? (int) $category->id : 0;
+            return $category ? (int)$category->id : 0;
         }
 
         return 0;
@@ -299,9 +331,9 @@ class AccountDrebedengi extends Account
     public function getCategoryHomeEquipment(): int
     {
         if ($parent = $this->findCategory(static::CATEGORY_HOME)) {
-            $category = $this->findCategory(static::CATEGORY_HOMEEQUIPMENT, (int) $parent->id);
+            $category = $this->findCategory(static::CATEGORY_HOMEEQUIPMENT, (int)$parent->id);
 
-            return $category ? (int) $category->id : 0;
+            return $category ? (int)$category->id : 0;
         }
 
         return 0;
@@ -315,9 +347,9 @@ class AccountDrebedengi extends Account
     public function getCategoryHomeBills(): int
     {
         if ($parent = $this->findCategory(static::CATEGORY_HOME)) {
-            $category = $this->findCategory(static::CATEGORY_HOMEBILLS, (int) $parent->id);
+            $category = $this->findCategory(static::CATEGORY_HOMEBILLS, (int)$parent->id);
 
-            return $category ? (int) $category->id : 0;
+            return $category ? (int)$category->id : 0;
         }
 
         return 0;
@@ -330,14 +362,27 @@ class AccountDrebedengi extends Account
      */
     public function getCategoryVanguardFood(): int
     {
-        if (($work = $this->findCategory(static::CATEGORY_WORK)) &&
-            ($parent = $this->findCategory(static::CATEGORY_WORKVANGUARD, (int) $work->id))) {
+        $category = null;
+        if ($parent = $this->findCategory(static::CATEGORY_WORKVANGUARD, $this->findMyWork())) {
             $category = $this->findCategory(static::CATEGORY_WORKFOOD, (int)$parent->id);
-
-            return $category ? (int) $category->id : 0;
         }
 
-        return 0;
+        return $category ? (int)$category->id : 0;
+    }
+
+    /**
+     * Return my work category.
+     *
+     * @return int
+     */
+    private function findMyWork(): int
+    {
+        $myWork = null;
+        if ($work = $this->findCategory(static::CATEGORY_WORK)) {
+            $myWork = $this->findCategory(static::CATEGORY_WORKME, (int)$work->id);
+        }
+
+        return $myWork ? (int)$myWork->id : 0;
     }
 
     /**
@@ -349,7 +394,25 @@ class AccountDrebedengi extends Account
     {
         $place = $this->findPlace(static::PLACE_CASH);
 
-        return $place ? (int) $place->id : 0;
+        return $place ? (int)$place->id : 0;
+    }
+
+    /**
+     * Find place by name.
+     *
+     * @param string $name Name.
+     *
+     * @return \stdClass
+     */
+    private function findPlace(string $name): ?\stdClass
+    {
+        foreach ($this->data->places as $place) {
+            if ($place->name === $name) {
+                return $place;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -363,7 +426,7 @@ class AccountDrebedengi extends Account
     {
         $place = $this->findPlace($name);
 
-        return $place ? (int) $place->id : 0;
+        return $place ? (int)$place->id : 0;
     }
 
     /**
@@ -375,52 +438,6 @@ class AccountDrebedengi extends Account
     {
         $place = $this->findPlace(static::PLACE_ALFARUB);
 
-        return $place ? (int) $place->id : 0;
-    }
-
-    /**
-     * Find category by name.
-     *
-     * @param string  $name     Name.
-     * @param integer $parentId Parent ID.
-     *
-     * @return \stdClass
-     */
-    private function findCategory(string $name, int $parentId = 0): ?\stdClass
-    {
-        /** @noinspection ForeachSourceInspection */
-        foreach ($this->data->categories as $category) {
-            if ($category->name === $name) {
-                if ($parentId) {
-                    if ($parentId === (int) $category->parent_id) {
-                        return $category;
-                    }
-                    continue;
-                }
-
-                return $category;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Find place by name.
-     *
-     * @param string $name Name.
-     *
-     * @return \stdClass
-     */
-    private function findPlace(string $name): ?\stdClass
-    {
-        /** @noinspection ForeachSourceInspection */
-        foreach ($this->data->places as $place) {
-            if ($place->name === $name) {
-                return $place;
-            }
-        }
-
-        return null;
+        return $place ? (int)$place->id : 0;
     }
 }

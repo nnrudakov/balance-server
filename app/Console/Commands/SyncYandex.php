@@ -188,9 +188,11 @@ class SyncYandex extends Command
                     $budget = $dd->getCategoryMedTreatment();
                 } elseif (\strpos($transaction->title, 'IP USOLCEVA N.G') !== false) {
                     $budget = $dd->getCategoryVanguardFood();
-                } else {
+                }
+                if (!$budget) {
                     $budget = $dd->getCategoryFood();
                 }
+
                 break;
             case AccountDrebedengi::TYPE_MOVE:
             case AccountDrebedengi::TYPE_CHANGE:

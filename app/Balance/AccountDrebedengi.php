@@ -156,7 +156,7 @@ class AccountDrebedengi extends Account
     /**
      * @var string Category for food in VanguardSoft.
      */
-    private const CATEGORY_WORKFOOD = 'Питание';
+    private const CATEGORY_WORKFOOD = 'Обеды';
     /**
      * Place for cash.
      *
